@@ -55,41 +55,6 @@ app.use(express.json({ limit: BODYPARSER_LIMIT }))
 // disable auto etag (md5) generation for responses
 app.set("etag", false)
 
-// append all available services
-fs.readdir(__dirname + "/services", (err, files) => {
-    if (err) return console.error(err);
-    console.log("Loading services");
-    for (let i in files) {
-        let filename = files[i]
-        let filepath = path.join(__dirname, "services", filename)
-
-        let stats = fs.statSync(filepath)
-        if (!stats.isFile())
-            continue;
-
-        let parts = filename.split(".")
-        assert.equal(parts.length, 3)
-        let serviceName = parts[0]
-        let version = parts[1]
-
-        // build a router for each service version
-        // general URL form: /version/service/...
-        let router = express.Router({
-            caseSensitive: true,
-            strict: true
-        })
-
-        let urlPrefix = "/" + serviceName + "/" + version
-
-        // Both the app types have been initialized with the same libs
-        // so we can provide either of them to the services, here appPublic.
-        require(filepath)(app, router, urlPrefix);
-
-        // Routes that are supposed to be accessed publicly.
-        app.use(urlPrefix, router)
-    }
-})
-
 // Nothing to serve on "/" on the public port.
 app.get("/", function (req, res) {
     return res.end();
@@ -100,10 +65,43 @@ app.use(express.static(__dirname + "/public"))
 
 app.use("/static", express.static(__dirname + "/static"))
 
+function servicesInit(app, callback){
+    // append all available services
+    fs.readdir(__dirname + "/services", (err, files) => {
+        if (err) return console.error(err);
+        for (let i in files) {
+            let filename = files[i]
+            let filepath = path.join(__dirname, "services", filename)
 
-// This avoids doing the normal initialization when launching tests only.
-if (require.main === module) {
+            let stats = fs.statSync(filepath)
+            if (!stats.isFile())
+                continue;
 
+            let parts = filename.split(".")
+            assert.equal(parts.length, 3)
+            let serviceName = parts[0]
+            let version = parts[1]
+
+            // build a router for each service version
+            // general URL form: /version/service/...
+            let router = express.Router({
+                caseSensitive: true,
+                strict: true
+            })
+
+            let urlPrefix = "/" + serviceName + "/" + version
+
+            // Both the app types have been initialized with the same libs
+            // so we can provide either of them to the services, here appPublic.
+            require(filepath)(app, router, urlPrefix);
+
+            // Routes that are supposed to be accessed publicly.
+            app.use(urlPrefix, router)
+        }
+        callback(app);
+    })
+}
+servicesInit(app, app => {
     // start http server
     let httpServer = app.listen(app.get("port"), function () {
         console.log({
@@ -119,4 +117,4 @@ if (require.main === module) {
     httpServer.headersTimeout = HTTP_HEADERS_TIMEOUT_MS
 
     httpServer.timeout = HTTP_KEEP_ALIVE_TIMEOUT_MS
-}
+});
