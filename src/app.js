@@ -6,6 +6,8 @@ let fs = require("fs");
 let morgan = require("morgan");
 let path = require("path");
 let cors = require("cors");
+const multer  = require('multer');
+const upload = multer();
 require('dotenv').config()
 const db = require("./lib/db");
 
@@ -26,7 +28,7 @@ const app = express()
 app.set("appType", AppType.Public)
 
 app.set("db", db)
-
+app.set("upload", upload)
 
 app.set("port", process.env.PUBLIC_PORT || PUBLIC_PORT);
 
