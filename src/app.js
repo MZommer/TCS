@@ -67,6 +67,14 @@ app.use(express.static(__dirname + "/public"))
 
 app.use("/static", express.static(__dirname + "/static"))
 
+app.use((err, req, res, next) => {
+    res.status(err.status || 400).json({
+        success: false,
+        message: err.message || 'An error occured.',
+        errors: err.error || undefined,
+    });
+});
+
 function servicesInit(app, callback){
     // append all available services
     fs.readdir(__dirname + "/services", (err, files) => {
