@@ -9,8 +9,13 @@ module.exports = function(app, routerPublic, routerPrivate)
 		const wb = XLSX.read(req.file.buffer);
 		const data = wb.SheetNames.map(SheetName => XLSX.utils.sheet_to_json(wb.Sheets[SheetName]));
 		data.forEach(sheet => db.loadProducts(sheet));
-		res.send(200);
+		res.sendStatus(200);
 	});
 
+	routerPublic.get("/", async (req, res) => {
+		const env = req.query.env || "DEV" // by now we getting like this the env, to implement the TempestENV and the authentication lib
+		const products = await db.getProducts(env)
+		res.send(products)
+	})
 	
 }
