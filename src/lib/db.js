@@ -9,6 +9,30 @@ sequelize.authenticate()
     .finally(() => console.log('Connection has been established successfully.'))
     .catch(error => console.error('Unable to connect to the database:', error))
 // Connection
+const EnviromentModel = sequelize.define("Envirement", {
+    ID: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false,
+    },
+})
+
+const SpaceModel = sequelize.define("Envirement", {
+    SpaceID: {
+        type: DataTypes.STRING,
+        primaryKey: true,
+        allowNull: false,
+    },
+    EnvID: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        references: {
+            model: EnviromentModel,
+            key: 'ID',
+        },
+    },
+})
+// Enviroments and Spaces Not implemented yet
 
 const ProductModel = sequelize.define("Product", {
     ID: {
