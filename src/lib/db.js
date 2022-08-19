@@ -15,6 +15,14 @@ const EnviromentModel = sequelize.define("Envirement", {
         primaryKey: true,
         allowNull: false,
     },
+    InitialMoney: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    Currency: {
+        type: DataTypes.STRING,
+        defaultValue: 'ARS',
+    },
 })
 
 const SpaceModel = sequelize.define("Envirement", {
