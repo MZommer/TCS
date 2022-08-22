@@ -30,7 +30,7 @@ app.set("appType", AppType.Public)
 app.set("db", db)
 app.set("upload", upload)
 
-app.set("port", process.env.PUBLIC_PORT || PUBLIC_PORT);
+app.set("port", process.env.PORT || PUBLIC_PORT);
 
 app.set("trust proxy", true);
 app.set("view engine", "ejs");
