@@ -18,7 +18,7 @@ module.exports = function(app, routerPublic, routerPrivate)
 		res.send(products)
 	})
 
-	routerPublic.get("/:id", async (req, res) {
+	routerPublic.get("/:id", async (req, res) => {
 		const env = req.query.env || "DEV" // by now we getting like this the env, to implement the TempestENV and the authentication lib
 		const productid = req.params.id
 		const product = await db.getProductDetails(env, productid)
