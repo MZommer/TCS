@@ -1,5 +1,5 @@
 "use strict";
-const XLSX = require("XLSX");
+const XLSX = require("xlsx");
 
 module.exports = function(app, routerPublic, routerPrivate)
 {
