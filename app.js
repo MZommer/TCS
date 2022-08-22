@@ -99,7 +99,7 @@ function servicesInit(app, callback){
                 strict: true
             })
 
-            let urlPrefix = "./" + serviceName + "/" + version
+            let urlPrefix = "/" + serviceName + "/" + version
 
             // Both the app types have been initialized with the same libs
             // so we can provide either of them to the services, here appPublic.
