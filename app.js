@@ -11,6 +11,8 @@ const upload = multer();
 require('dotenv').config()
 const db = require("./lib/db");
 
+db.createEnv("DEV", "ARS", 1000)
+db.createSpace("UAT", "DEV")
 
 const PUBLIC_PORT = 3000;
 const HTTP_HEADERS_TIMEOUT_MS = 410 * 1000;

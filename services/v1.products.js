@@ -6,9 +6,10 @@ module.exports = function(app, routerPublic, routerPrivate)
 	var upload = app.get("upload");
 	var db = app.get("db");	
 	routerPublic.post(["/upload/xlsx", "/upload/csv"], upload.single("sheet"), (req, res) => {
+		const dropTable = req.query.dropTable || true;
 		const wb = XLSX.read(req.file.buffer);
 		const data = wb.SheetNames.map(SheetName => XLSX.utils.sheet_to_json(wb.Sheets[SheetName]));
-		data.forEach(sheet => db.loadProducts(sheet));
+		data.forEach(sheet => db.loadProducts(sheet, null, dropTable));
 		res.sendStatus(200);
 	});
 
