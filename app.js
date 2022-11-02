@@ -10,9 +10,10 @@ const multer  = require('multer');
 const upload = multer();
 require('dotenv').config()
 const db = require("./lib/db");
+const TempestClient = require("./lib/client");
 
-db.createEnv("DEV", "ARS", 1000)
-db.createSpace("UAT", "DEV")
+// db.createEnv("DEV", "ARS", 1000)
+// db.createSpace("UAT", "DEV")
 
 const PUBLIC_PORT = 4000;
 const HTTP_HEADERS_TIMEOUT_MS = 410 * 1000;
@@ -31,7 +32,7 @@ app.set("appType", AppType.Public)
 
 app.set("db", db)
 app.set("upload", upload)
-
+app.set("Tempest", TempestClient);
 app.set("port", process.env.PORT || PUBLIC_PORT);
 
 app.set("trust proxy", true);
