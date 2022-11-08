@@ -6,14 +6,15 @@ let fs = require("fs");
 let morgan = require("morgan");
 let path = require("path");
 let cors = require("cors");
-const multer  = require('multer');
+const multer = require('multer');
 const upload = multer();
 require('dotenv').config()
 const db = require("./lib/db");
 const TempestClient = require("./lib/client");
 
-// db.createEnv("DEV", "ARS", 1000)
-// db.createSpace("UAT", "DEV")
+//db.createEnv("DEV", "ARS", 1000)
+//    .then(() => db.createSpace("UAT", "DEV")
+//        .then(() => console.log("DEV Enviroment created")))
 
 const PUBLIC_PORT = 4000;
 const HTTP_HEADERS_TIMEOUT_MS = 410 * 1000;
@@ -22,8 +23,8 @@ const BODYPARSER_LIMIT = "20mb";
 
 // A tiny enum for the app type
 const AppType = {
-	Public: "public",
-	Private: "private"
+    Public: "public",
+    Private: "private"
 }
 
 const app = express()
@@ -43,7 +44,7 @@ app.use(cors())
 app.use(morgan("dev"))
 
 // ensure that the IP is defined
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     Object.defineProperty(req, "ip", {
         value: (req.ip ||
             req.connection.remoteAddress ||
@@ -61,7 +62,7 @@ app.use(express.json({ limit: BODYPARSER_LIMIT }))
 app.set("etag", false)
 
 // Nothing to serve on "/" on the public port.
-app.get("/", function (req, res) {
+app.get("/", function(req, res) {
     return res.end();
 });
 
@@ -78,7 +79,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-function servicesInit(app, callback){
+function servicesInit(app, callback) {
     // append all available services
     fs.readdir(__dirname + "/services", (err, files) => {
         if (err) return console.error(err);
@@ -116,7 +117,7 @@ function servicesInit(app, callback){
 }
 servicesInit(app, app => {
     // start http server
-    let httpServer = app.listen(app.get("port"), function () {
+    let httpServer = app.listen(app.get("port"), function() {
         console.log({
             port: app.get("port"),
             api: app.get("appType")
