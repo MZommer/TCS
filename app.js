@@ -12,10 +12,6 @@ require('dotenv').config()
 const db = require("./lib/db");
 const TempestClient = require("./lib/client");
 
-//db.createEnv("DEV", "ARS", 1000)
-//    .then(() => db.createSpace("UAT", "DEV")
-//        .then(() => console.log("DEV Enviroment created")))
-
 const PUBLIC_PORT = 4000;
 const HTTP_HEADERS_TIMEOUT_MS = 410 * 1000;
 const HTTP_KEEP_ALIVE_TIMEOUT_MS = 410 * 1000;
